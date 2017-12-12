@@ -5,6 +5,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+
+import java.util.ArrayList;
+
+import static me.blip.pokeymans.Position.*;
 import static me.blip.pokeymans.BattleState.*;
 import static me.blip.pokeymans.Battle.battleState;
 
@@ -23,7 +27,7 @@ public class BattleMenu
         {
             public boolean keyDown(InputEvent event, int keycode)
             {
-                switch(battleState)
+                switch (battleState)
                 {
                     case NO_INPUT:
                         break;
@@ -63,7 +67,7 @@ public class BattleMenu
                 return true;
             }
 
-            public boolean keyUp(InputEvent event,int keycode)
+            public boolean keyUp(InputEvent event, int keycode)
             {
                 return true;
             }
@@ -110,7 +114,7 @@ public class BattleMenu
 
     private void fightRun1(int keycode)
     {
-        switch(keycode)
+        switch (keycode)
         {
             case Keys.UP:
                 battleState = MOVE1;
@@ -126,7 +130,7 @@ public class BattleMenu
 
     private void fightRun2(int keycode)
     {
-        switch(keycode)
+        switch (keycode)
         {
             case Keys.UP:
                 battleState = MOVE2;
@@ -139,28 +143,51 @@ public class BattleMenu
             case Keys.BACKSPACE:
                 battleState = FIGHT_RUN1;
                 fightRunOut();
+                //CLEAR THE QUEUE!!! V can probs clean this up bleugh!
+                battle.actionQueue.clear();
+                battle.friendly1.switching = false;
+                battle.friendly2.switching = false;
+                battle.friendly3.switching = false;
+                battle.friendly4.switching = false;
+                battle.friendly5.switching = false;
+                battle.friendly6.switching = false;
                 break;
         }
     }
 
+    //queues the switch move for the 2 positions
+    private void queueSwitch(Position battlePosition, Position benchPosition)
+    {
+        ArrayList<Position> target = new ArrayList<Position>();
+        target.add(benchPosition);
+        battle.actionQueue.add(new Switch(battle, battle.getPokeyByPosition(battlePosition), target));
+    }
 
     private void switching1(int keycode)
     {
-        switch(keycode)
+        switch (keycode)
         {
             case Keys.LEFT:
                 battleState = FIGHT_RUN2;
+                queueSwitch(FRIENDLY_LEFT, FRIENDLY_BENCH3);
+                battle.getPokeyByPosition(FRIENDLY_BENCH3).switching = true;
                 fightRunOut();
                 break;
             case Keys.RIGHT:
+                queueSwitch(FRIENDLY_LEFT, Position.FRIENDLY_BENCH2);
+                battle.getPokeyByPosition(FRIENDLY_BENCH2).switching = true;
                 battleState = FIGHT_RUN2;
                 fightRunOut();
                 break;
             case Keys.UP:
+                queueSwitch(FRIENDLY_LEFT, Position.FRIENDLY_BENCH1);
+                battle.getPokeyByPosition(FRIENDLY_BENCH1).switching = true;
                 battleState = FIGHT_RUN2;
                 fightRunOut();
                 break;
             case Keys.DOWN:
+                queueSwitch(FRIENDLY_LEFT, Position.FRIENDLY_BENCH4);
+                battle.getPokeyByPosition(FRIENDLY_BENCH4).switching = true;
                 battleState = FIGHT_RUN2;
                 fightRunOut();
                 break;
@@ -173,35 +200,54 @@ public class BattleMenu
 
     private void switching2(int keycode)
     {
-        switch(keycode)
+        switch (keycode)
         {
             case Keys.LEFT:
-                //Switch friendlyright with benchleft
-                battleState = NO_INPUT;
+                if (!battle.getPokeyByPosition(FRIENDLY_BENCH3).switching)
+                {
+                    queueSwitch(FRIENDLY_RIGHT, FRIENDLY_BENCH3);
+                    battleState = NO_INPUT;
+                    battle.executeActions();
+                }
                 break;
+
             case Keys.RIGHT:
-                battleState = NO_INPUT;
-                //Switch friendlyright with benchright
+                if (!battle.getPokeyByPosition(FRIENDLY_BENCH2).switching)
+                {
+                    queueSwitch(FRIENDLY_RIGHT, Position.FRIENDLY_BENCH2);
+                    battleState = NO_INPUT;
+                    battle.executeActions();
+                }
                 break;
+
             case Keys.UP:
-                battleState = NO_INPUT;
-                //Switch friendlyright with benchup
+                if (!battle.getPokeyByPosition(FRIENDLY_BENCH1).switching)
+                {
+                    queueSwitch(FRIENDLY_RIGHT, Position.FRIENDLY_BENCH1);
+                    battleState = NO_INPUT;
+                    battle.executeActions();
+                }
                 break;
+
             case Keys.DOWN:
-                battleState = NO_INPUT;
-                //Switch friendlyright with benchdown
+                if (!battle.getPokeyByPosition(FRIENDLY_BENCH4).switching)
+                {
+                    queueSwitch(FRIENDLY_RIGHT, Position.FRIENDLY_BENCH4);
+                    battleState = NO_INPUT;
+                    battle.executeActions();
+                }
                 break;
+
             case Keys.BACKSPACE:
                 battleState = FIGHT_RUN2;
                 fightRunOut();
-                //Go back to fightrun
                 break;
         }
     }
 
     private void move1(int keycode)
     {
-        switch(keycode)
+        switch (keycode)
         {
             case Keys.LEFT:
                 battleState = TARGET1;
@@ -228,7 +274,7 @@ public class BattleMenu
 
     private void move2(int keycode)
     {
-        switch(keycode)
+        switch (keycode)
         {
             case Keys.LEFT:
                 battleState = TARGET2;
@@ -255,7 +301,7 @@ public class BattleMenu
 
     private void target1(int keycode)
     {
-        switch(keycode)
+        switch (keycode)
         {
             case Keys.LEFT:
                 battleState = FIGHT_RUN2;
@@ -282,7 +328,7 @@ public class BattleMenu
 
     private void target2(int keycode)
     {
-        switch(keycode)
+        switch (keycode)
         {
             case Keys.LEFT:
                 battleState = NO_INPUT;
@@ -301,5 +347,7 @@ public class BattleMenu
                 moveOut();
                 break;
         }
+
+        //battle.executeActions();
     }
 }
