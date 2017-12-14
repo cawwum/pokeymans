@@ -5,9 +5,9 @@ import me.blip.pokeymans.moves.BulletPunch;
 
 public class Scizor extends Pokey
 {
-    public Scizor(Battle battle)
+    public Scizor(Battle battle,int lv)
     {
-        super(battle,70,130,100,65,"Scizor", Type.BUG,Type.STEEL);
+        super(battle,lv,70,130,100,65,"Scizor", Type.BUG,Type.STEEL);
 
         learnableMoves.add(new Pair<Integer, Move>(1,new BulletPunch(battle,this)));
 

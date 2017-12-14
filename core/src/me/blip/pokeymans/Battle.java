@@ -12,27 +12,31 @@ import static me.blip.pokeymans.Position.*;
 public class Battle
 {
     public BattleMenu battleMenu;
+    public BattleAI battleAI;
     public static BattleState battleState;
+    public Formuoli formuoli;
 
-    public Pokey friendly1 = new Scizor(this);
-    public Pokey friendly2 = new Scizor(this);
-    public Pokey friendly3 = new Scizor(this);
-    public Pokey friendly4 = new Scizor(this);
-    public Pokey friendly5 = new Scizor(this);
-    public Pokey friendly6 = new Scizor(this);
-    public Pokey enemy1 = new Scizor(this);
-    public Pokey enemy2 = new Scizor(this);
-    public Pokey enemy3 = new Scizor(this);
-    public Pokey enemy4 = new Scizor(this);
-    public Pokey enemy5 = new Scizor(this);
-    public Pokey enemy6 = new Scizor(this);
+    public Pokey friendly1 = new Scizor(this,50);
+    public Pokey friendly2 = new Scizor(this,75);
+    public Pokey friendly3 = new Scizor(this,45);
+    public Pokey friendly4 = new Scizor(this,13);
+    public Pokey friendly5 = new Scizor(this,20);
+    public Pokey friendly6 = new Scizor(this,40);
+    public Pokey enemy1 = new Scizor(this,43);
+    public Pokey enemy2 = new Scizor(this,50);
+    public Pokey enemy3 = new Scizor(this,47);
+    public Pokey enemy4 = new Scizor(this,12);
+    public Pokey enemy5 = new Scizor(this,10);
+    public Pokey enemy6 = new Scizor(this,32);
 
     public HashMap<Position,Pokey> pokeyMap = new HashMap<Position, Pokey>();
     public ArrayList<Move> actionQueue = new ArrayList<Move>();
 
     public Battle(Stage stage)
     {
+        formuoli = new Formuoli();
         battleMenu = new BattleMenu(this,stage);
+        battleAI = new BattleAI(this);
 
         //simplified, but will 1-2-1 in final version!
         if(friendly1 != null)toPosition(friendly1,FRIENDLY_LEFT);
@@ -59,19 +63,27 @@ public class Battle
 
     public void executeActions()
     {
+        battleAI.startTurn();
+
         for(int i=actionQueue.size()-1;i>=0;i--)
         {
-            ArrayList<Position> targets = actionQueue.get(i).targets;
+            Move move = actionQueue.get(i);
+            Pokey user = move.user;
+            ArrayList<Position> targets = move.targets;
 
-            for(int j=0;j<targets.size();j++)
+            if(!user.fainted)
             {
-                Pokey pokey = getPokeyByPosition(targets.get(j));
-
-                if(!pokey.fainted)
+                for (int j = 0; j < targets.size(); j++)
                 {
-                    //do stuff to pokey!
-                    //pokey.hp -= formuoli.calculatedamage actionQueue.get(i).power;
-                    actionQueue.get(i).bonusEffects();
+                    Pokey target = getPokeyByPosition(targets.get(j));
+
+                    if (!target.fainted)
+                    {
+                        System.out.println("HP Before: "+target.hp);
+                        if(move.power > 0)target.hp -= formuoli.calculateDamage(user,target,move);
+                        actionQueue.get(i).bonusEffects();
+                        System.out.println("HP After: "+target.hp);
+                    }
                 }
             }
         }
