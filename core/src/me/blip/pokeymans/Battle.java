@@ -1,6 +1,7 @@
 package me.blip.pokeymans;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import me.blip.pokeymans.pokeys.Scizor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,18 +14,18 @@ public class Battle
     public BattleMenu battleMenu;
     public static BattleState battleState;
 
-    public Pokey friendly1 = new Pokey();
-    public Pokey friendly2 = new Pokey();
-    public Pokey friendly3 = new Pokey();
-    public Pokey friendly4 = new Pokey();
-    public Pokey friendly5 = new Pokey();
-    public Pokey friendly6 = new Pokey();
-    public Pokey enemy1 = new Pokey();
-    public Pokey enemy2 = new Pokey();
-    public Pokey enemy3 = new Pokey();
-    public Pokey enemy4 = new Pokey();
-    public Pokey enemy5 = new Pokey();
-    public Pokey enemy6 = new Pokey();
+    public Pokey friendly1 = new Scizor(this);
+    public Pokey friendly2 = new Scizor(this);
+    public Pokey friendly3 = new Scizor(this);
+    public Pokey friendly4 = new Scizor(this);
+    public Pokey friendly5 = new Scizor(this);
+    public Pokey friendly6 = new Scizor(this);
+    public Pokey enemy1 = new Scizor(this);
+    public Pokey enemy2 = new Scizor(this);
+    public Pokey enemy3 = new Scizor(this);
+    public Pokey enemy4 = new Scizor(this);
+    public Pokey enemy5 = new Scizor(this);
+    public Pokey enemy6 = new Scizor(this);
 
     public HashMap<Position,Pokey> pokeyMap = new HashMap<Position, Pokey>();
     public ArrayList<Move> actionQueue = new ArrayList<Move>();
@@ -52,7 +53,7 @@ public class Battle
         System.out.println(friendly1.position+","+friendly2.position+","+friendly3.position+","+
                 friendly4.position+","+friendly5.position+","+friendly6.position);
 
-        battleMenu.fightRunOut();
+        battleMenu.fightRunOut(getPokeyByPosition(FRIENDLY_LEFT));
         battleState = FIGHT_RUN1;
     }
 
@@ -69,7 +70,7 @@ public class Battle
                 if(!pokey.fainted)
                 {
                     //do stuff to pokey!
-                    //pokey.hp -= actionQueue.get(i).power;
+                    //pokey.hp -= formuoli.calculatedamage actionQueue.get(i).power;
                     actionQueue.get(i).bonusEffects();
                 }
             }

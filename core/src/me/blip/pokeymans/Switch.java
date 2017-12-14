@@ -4,21 +4,20 @@ import java.util.ArrayList;
 
 public class Switch extends Move
 {
-    public Switch(Battle battle, Pokey user, ArrayList<Position> targets)
+    public Switch(Battle battle,Pokey user)
     {
-        super(battle,"",0,4,Type.NULL,user,targets);
+        super(battle,user,"",0,4,Type.NULL,
+                new ArrayList<PossibleTargets>(),false);
     }
 
     @Override
     public void bonusEffects()
     {
         Pokey target = battle.getPokeyByPosition(targets.get(0));
-        //whatever the bench position is
+
         System.out.println(user.name+", come back!");
         System.out.println("Go "+target.name+"!");
 
-        user.switching = false;
-        target.switching = false;
-        battle.swapPosition(user.position,target.position);
+        battle.swapPosition(user.position,targets.get(0));
     }
 }
