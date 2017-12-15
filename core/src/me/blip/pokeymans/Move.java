@@ -47,22 +47,29 @@ public abstract class Move
     {
         targets.clear();
 
-        for(int i=0;i<possibleTargets.size();i++)
+        if(user.position == Position.FRIENDLY_LEFT || user.position == Position.FRIENDLY_RIGHT)
         {
-            switch(possibleTargets.get(i))
+            for (int i = 0; i < possibleTargets.size(); i++)
             {
-                case SELF:
-                    targets.add(user.position);
-                    break;
-                case FRIEND:
-                    if(user.position.equals(Position.FRIENDLY_LEFT))targets.add(Position.FRIENDLY_RIGHT);
-                    else targets.add(Position.FRIENDLY_LEFT);
-                    break;
-                case ENEMIES:
-                    targets.add(Position.ENEMY_LEFT);
-                    targets.add(Position.ENEMY_RIGHT);
-                    break;
+                switch (possibleTargets.get(i))
+                {
+                    case SELF:
+                        targets.add(user.position);
+                        break;
+                    case FRIEND:
+                        if (user.position.equals(Position.FRIENDLY_LEFT)) targets.add(Position.FRIENDLY_RIGHT);
+                        else targets.add(Position.FRIENDLY_LEFT);
+                        break;
+                    case ENEMIES:
+                        targets.add(Position.ENEMY_LEFT);
+                        targets.add(Position.ENEMY_RIGHT);
+                        break;
+                }
             }
+        }
+        else
+        {
+            System.out.println("DO THIS FOR THE ENEMY duuuhhdhhhhH");
         }
     }
 

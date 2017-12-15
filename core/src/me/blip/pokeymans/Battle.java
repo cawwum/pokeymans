@@ -73,6 +73,10 @@ public class Battle
 
             if(!user.fainted)
             {
+                System.out.println("");
+                System.out.println(user.position);
+                System.out.println("");
+
                 for (int j = 0; j < targets.size(); j++)
                 {
                     Pokey target = getPokeyByPosition(targets.get(j));
@@ -87,6 +91,9 @@ public class Battle
                 }
             }
         }
+
+        battleState = FIGHT_RUN1;
+        battleMenu.fightRunOut(getPokeyByPosition(FRIENDLY_LEFT));
     }
 
     public void toPosition(Pokey pokey,Position position)

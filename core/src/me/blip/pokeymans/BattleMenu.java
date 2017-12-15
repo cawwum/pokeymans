@@ -130,28 +130,70 @@ public class BattleMenu
 
     private void move1(int keycode)
     {
+        Move move;
+
         switch (keycode)
         {
             case Keys.LEFT:
-                battleState = TARGET1;
-                tempActionQueue.add(battle.getPokeyByPosition(FRIENDLY_LEFT).moves.get(1));
-                targetOut();
+                move = battle.getPokeyByPosition(FRIENDLY_LEFT).moves.get(1);
+                tempActionQueue.add(move);
+                if (move.all)
+                {
+                    move.autoSelectTarget();
+                    battleState = FIGHT_RUN2;
+                }
+                else
+                {
+                    targetOut();
+                    battleState = TARGET1;
+                }
                 break;
+
             case Keys.RIGHT:
-                battleState = TARGET1;
-                tempActionQueue.add(battle.getPokeyByPosition(FRIENDLY_LEFT).moves.get(2));
-                targetOut();
+                move = battle.getPokeyByPosition(FRIENDLY_LEFT).moves.get(2);
+                tempActionQueue.add(move);
+                if (move.all)
+                {
+                    move.autoSelectTarget();
+                    battleState = FIGHT_RUN2;
+                }
+                else
+                {
+                    targetOut();
+                    battleState = TARGET1;
+                }
                 break;
+
             case Keys.UP:
-                battleState = TARGET1;
-                tempActionQueue.add(battle.getPokeyByPosition(FRIENDLY_LEFT).moves.get(0));
-                targetOut();
+                move = battle.getPokeyByPosition(FRIENDLY_LEFT).moves.get(0);
+                tempActionQueue.add(move);
+                if(move.all)
+                {
+                    move.autoSelectTarget();
+                    battleState = FIGHT_RUN2;
+                }
+                else
+                {
+                    targetOut();
+                    battleState = TARGET1;
+                }
                 break;
+
             case Keys.DOWN:
-                battleState = TARGET1;
-                tempActionQueue.add(battle.getPokeyByPosition(FRIENDLY_LEFT).moves.get(3));
-                targetOut();
+                move = battle.getPokeyByPosition(FRIENDLY_LEFT).moves.get(3);
+                tempActionQueue.add(move);
+                if(move.all)
+                {
+                    move.autoSelectTarget();
+                    battleState = FIGHT_RUN2;
+                }
+                else
+                {
+                    targetOut();
+                    battleState = TARGET1;
+                }
                 break;
+
             case Keys.BACKSPACE:
                 battleState = FIGHT_RUN1;
                 fightRunOut(battle.getPokeyByPosition(FRIENDLY_LEFT));
@@ -161,28 +203,73 @@ public class BattleMenu
 
     private void move2(int keycode)
     {
+        Move move;
         switch (keycode)
         {
             case Keys.LEFT:
-                battleState = TARGET2;
-                tempActionQueue.add(battle.getPokeyByPosition(FRIENDLY_RIGHT).moves.get(1));
-                targetOut();
+                move = battle.getPokeyByPosition(FRIENDLY_RIGHT).moves.get(1);
+                tempActionQueue.add(move);
+                if (move.all)
+                {
+                    move.autoSelectTarget();
+                    battleState = NO_INPUT;
+                    queueMoves();
+                }
+                else
+                {
+                    targetOut();
+                    battleState = TARGET2;
+                }
                 break;
+
             case Keys.RIGHT:
-                battleState = TARGET2;
-                tempActionQueue.add(battle.getPokeyByPosition(FRIENDLY_RIGHT).moves.get(2));
-                targetOut();
+                move = battle.getPokeyByPosition(FRIENDLY_RIGHT).moves.get(2);
+                tempActionQueue.add(move);
+                if (move.all)
+                {
+                    move.autoSelectTarget();
+                    battleState = NO_INPUT;
+                    queueMoves();
+                }
+                else
+                {
+                    targetOut();
+                    battleState = TARGET2;
+                }
                 break;
+
             case Keys.UP:
-                battleState = TARGET2;
-                tempActionQueue.add(battle.getPokeyByPosition(FRIENDLY_RIGHT).moves.get(0));
-                targetOut();
+                move = battle.getPokeyByPosition(FRIENDLY_RIGHT).moves.get(0);
+                tempActionQueue.add(move);
+                if(move.all)
+                {
+                    move.autoSelectTarget();
+                    battleState = NO_INPUT;
+                    queueMoves();
+                }
+                else
+                {
+                    targetOut();
+                    battleState = TARGET2;
+                }
                 break;
+
             case Keys.DOWN:
-                battleState = TARGET2;
-                tempActionQueue.add(battle.getPokeyByPosition(FRIENDLY_RIGHT).moves.get(3));
-                targetOut();
+                move = battle.getPokeyByPosition(FRIENDLY_RIGHT).moves.get(3);
+                tempActionQueue.add(move);
+                if(move.all)
+                {
+                    move.autoSelectTarget();
+                    battleState = NO_INPUT;
+                    queueMoves();
+                }
+                else
+                {
+                    targetOut();
+                    battleState = TARGET1;
+                }
                 break;
+
             case Keys.BACKSPACE:
                 battleState = FIGHT_RUN2;
                 fightRunOut(battle.getPokeyByPosition(FRIENDLY_RIGHT));
@@ -219,25 +306,25 @@ public class BattleMenu
         {
             case Keys.LEFT:
                 battleState = NO_INPUT;
-                tempActionQueue.get(tempActionQueue.size()-1).singleTarget(ENEMY_LEFT);
+                tempActionQueue.get(tempActionQueue.size() - 1).singleTarget(ENEMY_LEFT);
                 queueMoves();
                 break;
             case Keys.RIGHT:
                 battleState = NO_INPUT;
-                tempActionQueue.get(tempActionQueue.size()-1).singleTarget(ENEMY_RIGHT);
+                tempActionQueue.get(tempActionQueue.size() - 1).singleTarget(ENEMY_RIGHT);
                 queueMoves();
                 break;
             case Keys.BACKSPACE:
                 battleState = MOVE2;
                 moveOut(battle.getPokeyByPosition(FRIENDLY_RIGHT));
-                tempActionQueue.remove(tempActionQueue.size()-1);
+                tempActionQueue.remove(tempActionQueue.size() - 1);
                 break;
         }
     }
 
     private void switch1(int keycode)
     {
-        switch(keycode)
+        switch (keycode)
         {
             case Keys.LEFT:
                 battleState = FIGHT_RUN2;
@@ -276,10 +363,10 @@ public class BattleMenu
 
     private void switch2(int keycode)
     {
-        switch(keycode)
+        switch (keycode)
         {
             case Keys.LEFT:
-                if(!isSwitching(FRIENDLY_BENCH2))
+                if (!isSwitching(FRIENDLY_BENCH2))
                 {
                     battleState = NO_INPUT;
                     battle.getPokeyByPosition(FRIENDLY_RIGHT).switchMove.singleTarget(FRIENDLY_BENCH2);
@@ -289,7 +376,7 @@ public class BattleMenu
                 break;
 
             case Keys.RIGHT:
-                if(!isSwitching(FRIENDLY_BENCH3))
+                if (!isSwitching(FRIENDLY_BENCH3))
                 {
                     battleState = NO_INPUT;
                     battle.getPokeyByPosition(FRIENDLY_RIGHT).switchMove.singleTarget(FRIENDLY_BENCH3);
@@ -299,7 +386,7 @@ public class BattleMenu
                 break;
 
             case Keys.UP:
-                if(!isSwitching(FRIENDLY_BENCH1))
+                if (!isSwitching(FRIENDLY_BENCH1))
                 {
                     battleState = NO_INPUT;
                     battle.getPokeyByPosition(FRIENDLY_RIGHT).switchMove.singleTarget(FRIENDLY_BENCH1);
@@ -309,7 +396,7 @@ public class BattleMenu
                 break;
 
             case Keys.DOWN:
-                if(!isSwitching(FRIENDLY_BENCH4))
+                if (!isSwitching(FRIENDLY_BENCH4))
                 {
                     battleState = NO_INPUT;
                     battle.getPokeyByPosition(FRIENDLY_RIGHT).switchMove.singleTarget(FRIENDLY_BENCH4);
@@ -327,7 +414,7 @@ public class BattleMenu
 
     public void fightRunOut(Pokey pokey)
     {
-        System.out.println("WHAT WILL "+pokey.name+" DO?");
+        System.out.println("WHAT WILL " + pokey.name + " DO?");
         System.out.println("");
         System.out.println("     ^ FIGHT?");
         System.out.println("");
@@ -339,10 +426,10 @@ public class BattleMenu
     {
         ArrayList<Move> moves = pokey.moves;
 
-        if(moves.size() >=0)System.out.println("      ^ "+moves.get(0).name);
-        if(moves.size() >=1)System.out.println("< "+moves.get(1).name);
-        if(moves.size() >=2)System.out.println("         "+moves.get(2).name+" >");
-        if(moves.size() >=3)System.out.println("       v "+moves.get(3).name);
+        if (moves.size() >= 0) System.out.println("      ^ " + moves.get(0).name);
+        if (moves.size() >= 1) System.out.println("< " + moves.get(1).name);
+        if (moves.size() >= 2) System.out.println("         " + moves.get(2).name + " >");
+        if (moves.size() >= 3) System.out.println("       v " + moves.get(3).name);
         System.out.println("");
     }
 
